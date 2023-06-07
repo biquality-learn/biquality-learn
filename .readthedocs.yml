@@ -8,6 +8,10 @@ build:
 sphinx:
   configuration: docs/conf.py
 
+formats: all
+
 python:
   install:
     - requirements: docs/docs-requirements.txt
+    - method: setuptools
+      path: .
