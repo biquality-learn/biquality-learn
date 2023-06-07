@@ -1,0 +1,8 @@
+flake8
+isort
+black
+pytest
+pytest-xdist
+coverage
+pytest-cov
+pandas

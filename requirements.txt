@@ -1,0 +1,4 @@
+numpy>=1.17.3
+scipy>=1.5.0
+scikit-learn>=1.2.0
+scs>=3.2.2

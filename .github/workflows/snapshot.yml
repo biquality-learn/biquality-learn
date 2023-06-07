@@ -1,0 +1,33 @@
+name: snapshot
+
+on:
+  workflow_run:
+    workflows:
+      - main
+    branches:
+      - main
+    types:
+      - completed
+
+jobs:
+
+  snapshot:
+
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    - uses: actions/setup-python@v4
+    - name: Install twine
+      run: |
+        pip install setuptools wheel twine
+    - name: Build and publish
+      env:
+        TWINE_USERNAME: ${{ secrets.TEST_PYPI_USERNAME }}
+        TWINE_PASSWORD: ${{ secrets.TEST_PYPI_PASSWORD }}
+      run: |
+        python setup.py sdist bdist_wheel
+        twine upload -r testpypi dist/*
