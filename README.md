@@ -3,7 +3,7 @@
 [![main](https://github.com/biquality-learn/biquality-learn/actions/workflows/main.yml/badge.svg)](https://github.com/biquality-learn/biquality-learn/actions/workflows/main.yml)
 [![codecov](https://codecov.io/gh/biquality-learn/biquality-learn/branch/main/graph/badge.svg)](https://codecov.io/gh/biquality-learn/biquality-learn)
 [![versions](https://img.shields.io/badge/python-3.8%20|%203.9%20|%203.10-blue)](https://img.shields.io/badge/python-3.8%20|%203.9%20|%203.10-blue)
-[![pypi](https://pypip.in/v/biquality-learn/badge.png)](https://pypi.org/project/biquality-learn/)
+[![pypi](https://img.shields.io/pypi/v/biquality-learn?color=blue)](https://pypi.org/project/biquality-learn/)
 
 **biquality-learn** (or bqlearn in short) is a library à la [scikit-learn](https://github.com/scikit-learn/scikit-learn) for Biquality Learning. 
 
