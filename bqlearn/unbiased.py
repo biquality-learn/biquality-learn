@@ -176,10 +176,15 @@ or array-like of shape (n_classes, n_classes), default='anchor'
         if not has_fit_parameter(self.estimator, "sample_weight"):
             raise ValueError("The estimator doesn't support sample weight")
 
-        if self.transition_matrix in [
-            "gold",
-            "confusion",
-        ] and np.all(sample_quality == 0):
+        if (
+            isinstance(self.transition_matrix, str)
+            and self.transition_matrix
+            in [
+                "gold",
+                "confusion",
+            ]
+            and np.all(sample_quality == 0)
+        ):
             raise ValueError(
                 f"Unsupported transition matrix : {self.transition_matrix}"
                 " without high quality samples."
