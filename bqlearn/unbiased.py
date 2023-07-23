@@ -44,9 +44,9 @@ class LossCorrection(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):
 
     .. math::
 
-        \\tilde{L}(f(x),y) = \\frac{(1-\mathbb{P}(\\tilde{Y}= y|Y\\neqy))L(f(x), y)
+        \\tilde{L}(f(x),y) = \\frac{(1-\mathbb{P}(\\tilde{Y}= y|Y\\neq ))L(f(x), y)
         - \mathbb{P}(\\tilde{Y}\\neq y | Y =y ) L(f(x), -y) }
-        {1 - \mathbb{P}(\\tilde{Y}= y| Y\\neq y ) - \mathbb{P}(\\tilde{Y}\\neqy|Y =y)}
+        {1 - \mathbb{P}(\\tilde{Y}= y| Y\\neq y ) - \mathbb{P}(\\tilde{Y}\\neq |Y =y)}
 
     It does support multiclass classification thanks to a One versus Rest approach.
 

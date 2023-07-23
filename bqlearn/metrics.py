@@ -86,12 +86,10 @@ def gold_transition_matrix(y_true, y_prob, labels=None):
 
     if not np.all(le.classes_ == labels):
         warnings.warn(
-            (
-                f"Labels passed were {labels}. But this function "
-                "assumes labels are ordered lexicographically. "
-                "Ensure that labels in y_prob are ordered as "
-                f"{le.classes_}."
-            ),
+            f"Labels passed were {labels}. But this function "
+            "assumes labels are ordered lexicographically. "
+            "Ensure that labels in y_prob are ordered as "
+            f"{le.classes_}.",
             UserWarning,
         )
 

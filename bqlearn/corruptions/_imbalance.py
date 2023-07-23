@@ -93,12 +93,10 @@ def make_imbalance(
 
     if not np.all(classes == labels):
         warnings.warn(
-            (
-                f"Labels passed were {labels}. But this function "
-                "assumes labels are ordered lexicographically. "
-                "Ensure that labels in y are ordered as "
-                f"{classes}."
-            ),
+            f"Labels passed were {labels}. But this function "
+            "assumes labels are ordered lexicographically. "
+            "Ensure that labels in y are ordered as "
+            f"{classes}.",
             UserWarning,
         )
 

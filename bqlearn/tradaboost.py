@@ -207,11 +207,9 @@ class TrAdaBoostClassifier(AdaBoostClassifier):
 
             if not np.isfinite(sample_weight_sum):
                 warnings.warn(
-                    (
-                        "Sample weights have reached infinite values,"
-                        f" at iteration {iboost}, causing overflow. "
-                        "Iterations stopped. Try lowering the learning rate."
-                    ),
+                    "Sample weights have reached infinite values,"
+                    f" at iteration {iboost}, causing overflow. "
+                    "Iterations stopped. Try lowering the learning rate.",
                     stacklevel=2,
                 )
                 break

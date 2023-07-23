@@ -62,10 +62,8 @@ def make_biquality_cv(X, sample_quality, cv=None, *, y=None, groups=None):
     for i, (_, test_ind) in enumerate(cv.split(X, y, groups)):
         if np.any(folds[test_ind] != -1):
             warnings.warn(
-                (
-                    "Some samples appeared in multiple test sets, the last test found"
-                    " overrides the previously found test set for these samples."
-                ),
+                "Some samples appeared in multiple test sets, the last test found"
+                " overrides the previously found test set for these samples.",
                 UserWarning,
             )
 
