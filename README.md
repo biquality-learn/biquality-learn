@@ -86,11 +86,11 @@ bqclf.predict(X)
 If you use **biquality-learn** in your research, please consider citing us :
 
 ```
-@misc{todo,
+@misc{nodet2023biqualitylearn,
       title={biquality-learn: a Python library for Biquality Learning}, 
       author={Pierre Nodet and Vincent Lemaire and Alexis Bondu and Antoine Cornuéjols},
       year={2023},
-      eprint={todo},
+      eprint={2308.09643},
       archivePrefix={arXiv},
       primaryClass={cs.LG}
 }
