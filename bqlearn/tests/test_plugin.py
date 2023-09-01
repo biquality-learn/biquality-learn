@@ -1,6 +1,8 @@
 import numpy as np
+from pytest import raises
 from sklearn.base import clone
 from sklearn.datasets import make_classification
+from sklearn.exceptions import NotFittedError
 from sklearn.linear_model import LogisticRegression
 from sklearn.utils._testing import assert_array_equal
 
@@ -45,3 +47,19 @@ def test_plugin_swap_predictions():
     swapped_clf.fit(X, y)
 
     assert_array_equal(base_clf.predict(X), ~swapped_clf.predict(X) + 2)
+
+
+def test_plugin_prefit_option_with_nonprefit_estimator_should_throw():
+    seed = 1
+    n_classes = 2
+
+    X, y = make_classification(
+        n_samples=1000,
+        n_classes=n_classes,
+        random_state=seed,
+    )
+
+    plugin = PluginCorrection(LogisticRegression(), prefit=True)
+
+    with raises(NotFittedError):
+        plugin.fit(X, y)

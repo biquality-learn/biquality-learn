@@ -1,7 +1,8 @@
 import numpy as np
 from sklearn.base import BaseEstimator, ClassifierMixin, clone, MetaEstimatorMixin
-from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import LogisticRegression, SGDClassifier
 from sklearn.model_selection import StratifiedShuffleSplit
+from sklearn.semi_supervised import SelfTrainingClassifier
 from sklearn.utils.estimator_checks import parametrize_with_checks
 from sklearn.utils.multiclass import check_classification_targets
 from sklearn.utils.validation import _num_samples, check_is_fitted
@@ -22,7 +23,7 @@ from bqlearn.unhinged import KernelUnhinged, LinearUnhinged
     [
         LinearUnhinged(),
         KernelUnhinged(),
-        WeightedOneVsRestClassifier(LogisticRegression(), n_jobs=-1),
+        WeightedOneVsRestClassifier(SGDClassifier(random_state=0), n_jobs=-1),
     ]
 )
 def test_all_estimators(estimator, check):
@@ -48,6 +49,7 @@ class RandomSampleQuality(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):
 
     def fit(self, X, y, **fit_params):
         check_classification_targets(y)
+        print(y)
         _, untrusted = next(
             StratifiedShuffleSplit(train_size=0.5, random_state=1).split(X, y)
         )
@@ -84,9 +86,13 @@ class RandomSampleQuality(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):
         IRBL(LogisticRegression(), LogisticRegression()),
         KPDR(LogisticRegression()),
         KKMM(LogisticRegression()),
-        TrAdaBoostClassifier(LogisticRegression(), n_estimators=1),
-        IPDR(LogisticRegression(), n_estimators=1),
-        IKMM(LogisticRegression(), n_estimators=1),
+        TrAdaBoostClassifier(LogisticRegression(), n_estimators=2),
+        IPDR(LogisticRegression(), n_estimators=2),
+        IKMM(LogisticRegression(), n_estimators=2),
+        BiqualityBaseline(
+            SelfTrainingClassifier(LogisticRegression(), max_iter=2),
+            baseline="semi_supervised",
+        ),
     ]
 )
 def test_all_biquality_estimators(estimator, check):

@@ -16,17 +16,17 @@ format:
 # Run tests for the library
 
 test:
-	pytest -n auto --dist loadfile -s -v bqlearn
+	pytest -n auto -s -v bqlearn
 
 # Run tests for examples
 
 test-examples:
-	pytest -n auto --dist loadfile -s -v examples
+	pytest -n auto -s -v examples
 
 # Run code coverage
 
 coverage:
-	pytest --cov -n auto --cov-report xml --dist loadfile -s -v bqlearn
+	pytest -n auto --cov --cov-report xml -s -v bqlearn
 
 # Check that docs can build
 

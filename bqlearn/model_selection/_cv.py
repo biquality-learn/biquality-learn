@@ -59,15 +59,15 @@ def make_biquality_cv(X, sample_quality, cv=None, *, y=None, groups=None):
 
     folds = np.full(n_samples, -1.0)
 
-    for i, (_, test_ind) in enumerate(cv.split(X, y, groups)):
-        if np.any(folds[test_ind] != -1):
+    for i, (_, test) in enumerate(cv.split(X, y, groups)):
+        if np.any(folds[test] != -1):
             warnings.warn(
                 "Some samples appeared in multiple test sets, the last test found"
                 " overrides the previously found test set for these samples.",
                 UserWarning,
             )
 
-        folds[test_ind] = i
+        folds[test] = i
 
     folds[sample_quality == 0] = -1
 
