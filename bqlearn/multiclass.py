@@ -296,8 +296,9 @@ or (n_samples, n_classes), default=None
             return scores
 
     def _more_tags(self):
-        return self.estimator._more_tags() | {
-            "_xfail_checks": self.estimator._more_tags()["_xfail_checks"] | {
+        return {
+            "_xfail_checks": {
+                **self.estimator._more_tags()["_xfail_checks"],
                 "check_sample_weights_shape": "per class sample weights with ndim=2",
-            },
+            }
         }
