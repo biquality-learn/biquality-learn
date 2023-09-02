@@ -97,7 +97,7 @@ they can handle in the following Table.
    +-----------------------+--------------------+-----------------------+
    | IRBL [NLBC2021]_      | :math:`\times`     | :math:`\checkmark`    |
    +-----------------------+--------------------+-----------------------+
-   | KPDR                  | :math:`\checkmark` | :math:`\checkmark`    |
+   | KPDR [NLBC2023]_      | :math:`\checkmark` | :math:`\checkmark`    |
    +-----------------------+--------------------+-----------------------+
    | IPDR [L2018]_         | :math:`\checkmark` | :math:`\checkmark`    |
    +-----------------------+--------------------+-----------------------+
@@ -165,7 +165,7 @@ Any cross-validators working for usual Supervised Learning can work in
 the case of Biquality Learning. However, when splitting the data into a
 train and test set, untrusted samples need to be removed from the test
 set to avoid computing supervised metrics on corrupted labels. That is
-why :func:`bqlearn.model_selection.make_biquality_cv` is provided
+why :func:`bqlearn.model_selection.BiqualityCrossValidator` is provided
 by **biquality-learn** to post-process any **scikit-learn** compatible
 cross-validators.
 
@@ -178,7 +178,7 @@ biquality learning algorithm in **biquality-learn**:
 
    from sklearn.model_selection import RandomizedSearchCV
    from sklearn.utils.fixes import loguniform
-   from bqlearn.model_selection import make_biquality_cv
+   from bqlearn.model_selection import BiqualityCrossValidator
 
    param_dist = {"final_estimator__C": loguniform(1e3, 1e5)}
    n_iter=20
@@ -187,9 +187,9 @@ biquality learning algorithm in **biquality-learn**:
       kkmm,
       param_distributions=param_dist,
       n_iter=n_iter,
-      cv=make_biquality_cv(X, sample_quality, cv=3)
+      cv=BiqualityCrossValidator(cv=3)
    )
-   random_search.fit(X, y, sample_quality=sample_quality)
+   random_search.fit(X, y, groups=sample_quality, sample_quality=sample_quality)
 
 .. topic:: References
 
@@ -211,3 +211,5 @@ biquality learning algorithm in **biquality-learn**:
             Proceedings of the 45th Annual Meeting of the Association of Computational Linguistics. 2007.
 
  .. [L2018] Jiang, Lu, et al. "Mentornet: Learning data-driven curriculum for very deep neural networks on corrupted labels." International conference on machine learning. PMLR, 2018.
+
+ .. [NLBC2023] P. Nodet, V. Lemaire, A. Bondu, A. Cornuéjols, "Biquality Learning: a Framework to Design Algorithms Dealing with Closed-Set Distribution Shifts.", Machine Learning, 2023.

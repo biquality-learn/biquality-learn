@@ -30,13 +30,17 @@ def test_all_estimators(estimator, check):
     return check(estimator)
 
 
+@parametrize_with_checks([EasyADAPT()])
+def test_all_transformers(estimator, check):
+    return check(estimator)
+
+
 @parametrize_with_checks(
     [
         BiqualityBaseline(LogisticRegression(), baseline="no_correction"),
         PluginCorrection(LogisticRegression()),
         IRLNL(LogisticRegression(), LogisticRegression()),
         LossCorrection(LogisticRegression()),
-        EasyADAPT(LogisticRegression()),
     ]
 )
 def test_all_noisy_estimators(estimator, check):

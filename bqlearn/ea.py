@@ -3,37 +3,18 @@
 import numpy as np
 import scipy.sparse as sp
 from scipy.sparse import issparse
-from sklearn.base import (
-    BaseEstimator,
-    check_is_fitted,
-    ClassifierMixin,
-    clone,
-    MetaEstimatorMixin,
+from sklearn.base import BaseEstimator, check_is_fitted, TransformerMixin
+from sklearn.utils.validation import (
+    _check_feature_names_in,
+    _check_sample_weight,
+    _num_samples,
+    check_array,
 )
-from sklearn.utils.metaestimators import available_if
-from sklearn.utils.validation import _check_sample_weight, _num_samples, check_array
 
 __all__ = ["EasyADAPT"]
 
 
-def _estimator_has(attr):
-    """Check if we can delegate a method to the underlying estimator.
-    First, we check the fitted estimator if available, otherwise we
-    check the unfitted estimator.
-    """
-    return lambda self: (
-        hasattr(self.estimator_, attr)
-        if hasattr(self, "estimator_")
-        else hasattr(self.estimator, attr)
-    )
-
-
-# TODO: Refactor into a augmenter when metadata routing is done for pipelines
-# This augmenter will be stateless (no fit) and augment X accordingly to the routed
-# sample_quality values. We will get the same behaviour as the current estimator by
-# pipelining the new augmenter and an estimator.
-# https://github.com/scikit-learn/scikit-learn/pull/24270
-class EasyADAPT(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):
+class EasyADAPT(BaseEstimator, TransformerMixin):
     """A Frustratingly Easy approach to Domain Adaptation.
 
     EasyADAPT [1]_ creates an augmented input space
@@ -54,30 +35,13 @@ class EasyADAPT(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):
     different relation between the features and the target differently
     for the untrusted, trusted and general domain.
 
-    Parameters
-    ----------
-    estimator : estimator object
-        An estimator object.
-
     Attributes
     ----------
-    estimator_ : classifier
-        The fitted estimator.
-
-    classes_ : ndarray of shape (n_classes,)
-        The classes labels.
-
-    n_classes_ : int
-        The number of classes. Only defined if the
-        underlying estimator exposes such an attribute when fit.
-
     n_features_in_ : int
-        Number of features seen during :term:`fit`. Only defined if the
-        underlying estimator exposes such an attribute when fit.
+        Number of features seen during :term:`fit`.
 
     feature_names_in_ : ndarray of shape (`n_features_in_`,)
-        Names of features seen during :term:`fit`. Only defined if the
-        underlying estimator exposes such an attribute when fit.
+        Names of features seen during :term:`fit`.
 
     References
     ----------
@@ -86,10 +50,7 @@ class EasyADAPT(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):
         the Association of Computational Linguistics. 2007.
     """
 
-    def __init__(self, estimator):
-        self.estimator = estimator
-
-    def fit(self, X, y, sample_quality=None):
+    def fit(self, X, y=None):
         """Fit the augmented model.
 
         Parameters
@@ -97,11 +58,7 @@ class EasyADAPT(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):
         X : array-like of shape (n_samples, n_features)
             The samples.
 
-        y : array-like of shape (n_samples,)
-            The targets.
-
-        sample_quality : array-like, shape (n_samples,)
-            Per-sample qualities.
+        y : None
 
         Returns
         -------
@@ -109,18 +66,23 @@ class EasyADAPT(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):
             Returns self.
         """
 
-        X = self._validate_data(X, accept_sparse=["csr"], force_all_finite=False)
-
-        X_aug = self.augment(X, sample_quality=sample_quality)
-
-        self.estimator_ = clone(self.estimator)
-        self.estimator_.fit(X_aug, y)
-
-        self.classes_ = self.estimator_.classes_
+        self._check_n_features(X, reset=True)
+        self._check_feature_names(X, reset=True)
 
         return self
 
-    def augment(self, X, sample_quality=None):
+    def get_feature_names_out(self, input_features=None):
+        check_is_fitted(self, "n_features_in_")
+        feature_names_in = _check_feature_names_in(self, input_features)
+        output_prefixes = ["common", "source", "target"]
+        feature_names_out = []
+        for output_prefix in output_prefixes:
+            for feature_name_in in feature_names_in:
+                feature_names_out.append(f"{output_prefix} {feature_name_in}")
+
+        return feature_names_out
+
+    def transform(self, X, sample_quality=None):
         """Augment the input dataset according to `sample_quality`.
 
         Parameters
@@ -137,11 +99,13 @@ class EasyADAPT(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):
             Returns the augmented samples.
         """
 
-        X = check_array(X, accept_sparse=["csr"], force_all_finite=False)
+        X = check_array(X, accept_sparse=["csc", "csr", "lil"], force_all_finite=False)
 
         sample_quality = _check_sample_weight(sample_quality, X)
 
         n_samples = _num_samples(X)
+
+        self._check_n_features(X, reset=False)
         n_features = self.n_features_in_
 
         if issparse(X):
@@ -158,79 +122,8 @@ class EasyADAPT(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):
         ]
         return X_aug
 
-    @available_if(_estimator_has("decision_function"))
-    def decision_function(self, X):
-        """Call decision function of the `estimator` on the augmented dataset.
+    def fit_transform(self, X, y=None, sample_quality=None):
+        return self.fit(X, y).transform(X, sample_quality=sample_quality)
 
-        Parameters
-        ----------
-        X : array-like, shape (n_samples, n_features)
-            The input samples.
-
-        Returns
-        -------
-        y : ndarray, shape (n_samples,)
-            The predicted classes.
-        """
-        check_is_fitted(self)
-        X_aug = self.augment(X)
-
-        return self.estimator_.decision_function(X_aug)
-
-    @available_if(_estimator_has("predict"))
-    def predict(self, X):
-        """Predict the classes of `X`.
-
-        Parameters
-        ----------
-        X : array-like, shape (n_samples, n_features)
-            The input samples.
-
-        Returns
-        -------
-        y : ndarray, shape (n_samples,)
-            The predicted classes.
-        """
-        check_is_fitted(self)
-        X_aug = self.augment(X)
-
-        return self.estimator_.predict(X_aug)
-
-    @available_if(_estimator_has("predict_proba"))
-    def predict_proba(self, X):
-        """Predict probability for each possible outcome.
-
-        Parameters
-        ----------
-        X : array-like, shape (n_samples, n_features)
-            The input samples.
-
-        Returns
-        -------
-        p : array, shape (n_samples, n_classes)
-            The class probabilities of the input samples. The order of the
-            classes corresponds to that in the attribute :term:`classes_`.
-        """
-        check_is_fitted(self)
-        X_aug = self.augment(X)
-
-        return self.estimator_.predict_proba(X_aug)
-
-    @available_if(_estimator_has("predict_log_proba"))
-    def predict_log_proba(self, X):
-        """Predict log probability for each possible outcome.
-
-        Parameters
-        ----------
-        X : array-like, shape (n_samples, n_features)
-            The input samples.
-
-        Returns
-        -------
-        log_p : array, shape (n_samples, n_classes)
-            Array with log prediction probabilities.
-        """
-        check_is_fitted(self)
-        X_aug = self.augment(X)
-
-        return self.estimator_.predict_log_proba(X_aug)
+    def _more_tags(self):
+        return {"no_validation": True}

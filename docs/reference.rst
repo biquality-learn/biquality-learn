@@ -51,7 +51,7 @@ Biquality Cross-Validation
    :toctree: api
    :template: functions.rst
 
-   make_biquality_cv
+   BiqualityCrossValidator
 
 Corruptions
 ===========
