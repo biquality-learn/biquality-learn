@@ -7,6 +7,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import confusion_matrix
 
 from bqlearn.corruptions import (
+    make_feature_dependent_label_noise,
     make_instance_dependent_label_noise,
     make_label_noise,
     noisy_leaves_probability,
@@ -110,16 +111,33 @@ def test_noise_ratio_for_noisy_leaves(noise_ratio, purity, n_classes, n_samples)
 
 @pytest.mark.parametrize("noise_ratio", [0.0, 0.2, 0.5, 0.8, 1.0])
 @pytest.mark.parametrize("n_classes", [2, 10])
-@pytest.mark.parametrize("n_samples", [100])
-def test_noise_ratio_for_uncertainty(noise_ratio, n_classes, n_samples):
+@pytest.mark.parametrize("uncertainty", ["entropy", "uncertainty", "margin"])
+def test_noise_ratio_for_uncertainty(noise_ratio, n_classes, uncertainty):
     rng = np.random.RandomState(0)
-    n_samples = 1000
+    n_samples = 100
     X = rng.normal(size=(n_samples, 1))
     y = np.repeat(np.arange(0, n_classes), n_samples / n_classes)
 
     clf = LogisticRegression()
     clf.fit(X, y)
 
-    noise_prob = uncertainty_noise_probability(X, clf, noise_ratio=noise_ratio)
+    noise_prob = uncertainty_noise_probability(
+        X, clf, uncertainty=uncertainty, noise_ratio=noise_ratio
+    )
 
     assert math.isclose(np.mean(noise_prob), noise_ratio)
+
+
+@pytest.mark.parametrize("noise_ratio", [0.0, 0.2, 0.5, 0.8, 1.0])
+@pytest.mark.parametrize("n_classes", [2, 10])
+def test_noise_ratio_for_feature_noise(noise_ratio, n_classes):
+    rng = np.random.RandomState(0)
+    n_samples = 1000
+    X = rng.normal(size=(n_samples, 1))
+    y = np.repeat(np.arange(0, n_classes), n_samples / n_classes)
+
+    y_noisy = make_feature_dependent_label_noise(
+        X, y, noise_ratio=noise_ratio, random_state=0
+    )
+
+    assert math.isclose(np.mean(y_noisy != y), noise_ratio, abs_tol=0.1)

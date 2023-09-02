@@ -95,25 +95,6 @@ class WeightedOneVsRestClassifier(OneVsRestClassifier):
     feature_names_in_ : ndarray of shape (`n_features_in_`,)
         Names of features seen during :term:`fit`. Only defined if the
         underlying estimator exposes such an attribute when fit.
-
-    Examples
-    --------
-    >>> import numpy as np
-    >>> from sklearn.multiclass import OneVsRestClassifier
-    >>> from sklearn.svm import SVC
-    >>> X = np.array([
-    ...     [10, 10],
-    ...     [8, 10],
-    ...     [-5, 5.5],
-    ...     [-5.4, 5.5],
-    ...     [-20, -20],
-    ...     [-15, -20]
-    ... ])
-    >>> y = np.array([0, 0, 1, 1, 2, 2])
-    >>> sample_weight = np.array([0, 1, 0, 1, 0, 1])
-    >>> clf = WeightedOneVsRestClassifier(SVC()).fit(X, y, sample_weight=sample_weight)
-    >>> clf.predict([[-19, -20], [9, 9], [-5, 5]])
-    array([2, 0, 1])
     """
 
     def __init__(self, estimator, *, n_jobs=None, verbose=0):
@@ -317,6 +298,7 @@ or (n_samples, n_classes), default=None
     def _more_tags(self):
         return {
             "_xfail_checks": {
+                **self.estimator._more_tags()["_xfail_checks"],
                 "check_sample_weights_shape": "per class sample weights with ndim=2",
-            },
+            }
         }

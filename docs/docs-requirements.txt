@@ -4,7 +4,7 @@ scikit-learn>=1.2.0
 joblib>=1.1.1
 threadpoolctl>=3.1.0
 scs>=3.2.2
-sphinx
+sphinx==6.2.1
 sphinx_bootstrap_theme
 nbsphinx
 numpydoc

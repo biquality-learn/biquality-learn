@@ -112,8 +112,6 @@ def test_gold_transition_matrix_absent_class():
     tm1_mod = np.c_[np.r_[tm1, np.zeros((1, n_classes))], np.zeros((n_classes + 1, 1))]
     tm1_mod[n_classes] = np.ones(n_classes + 1) / (n_classes + 1)
 
-    print(tm1_mod, tm2)
-
     assert np.allclose(tm1_mod, tm2)
 
 
@@ -164,14 +162,27 @@ def test_gold_transition_matrix_shuffled():
     [anchor_transition_matrix, iterative_anchor_transition_matrix],
 )
 def test_anchor_transition_matrix_no_proba(tm_estimator):
-    _, _, probas_pred = make_prediction()
+    non_probas = np.random.rand(100, 2)
 
     with raises(ValueError):
-        tm_estimator(probas_pred * 10)
+        tm_estimator(non_probas)
+
+    with raises(ValueError):
+        tm_estimator(10 * non_probas)
+
+    with raises(ValueError):
+        tm_estimator(-10 * non_probas)
 
 
 def test_gold_transition_matrix_no_proba():
-    y_true, _, probas_pred = make_prediction()
+    non_probas = np.random.rand(100, 2)
+    y = np.argmax(non_probas, axis=1)
 
     with raises(ValueError):
-        gold_transition_matrix(y_true, probas_pred * 10)
+        gold_transition_matrix(y, non_probas)
+
+    with raises(ValueError):
+        gold_transition_matrix(y, 10 * non_probas)
+
+    with raises(ValueError):
+        gold_transition_matrix(y, -10 * non_probas)

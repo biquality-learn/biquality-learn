@@ -39,7 +39,7 @@ def pdr(X, Y, estimator, method="probabilities"):
         "Discriminative Learning for Differing Training and Test Distributions", 2007
     """
 
-    X, Y = check_pairwise_arrays(X, Y)
+    X, Y = check_pairwise_arrays(X, Y, accept_sparse=True, force_all_finite=False)
 
     n_samples_X = _num_samples(X)
     n_samples_Y = _num_samples(Y)
