@@ -3,7 +3,7 @@ from setuptools import find_packages, setup
 INSTALL_REQUIRES = [
     "numpy>=1.17.3",
     "scipy>=1.3.2",
-    "scikit-learn>=1.2.0",
+    "scikit-learn>=1.3.0",
     "joblib>=1.1.1",
     "threadpoolctl>=3.1.0",
     "scs>=3.2.2",
