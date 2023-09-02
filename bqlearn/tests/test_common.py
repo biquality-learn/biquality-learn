@@ -49,7 +49,7 @@ class RandomSampleQuality(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):
 
     def fit(self, X, y, **fit_params):
         check_classification_targets(y)
-        print(y)
+
         _, untrusted = next(
             StratifiedShuffleSplit(train_size=0.5, random_state=1).split(X, y)
         )

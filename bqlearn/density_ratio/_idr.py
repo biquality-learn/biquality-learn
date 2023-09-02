@@ -64,9 +64,7 @@ class IDR(BaseEstimator, ClassifierMixin, MetaEstimatorMixin, metaclass=ABCMeta)
         self : object
         """
 
-        X, y = self._validate_data(
-            X, y, accept_sparse=["csr", "csc", "lil", "dok"], force_all_finite=False
-        )
+        X, y = self._validate_data(X, y, accept_sparse=True, force_all_finite=False)
 
         check_classification_targets(y)
 
@@ -131,11 +129,13 @@ class IDR(BaseEstimator, ClassifierMixin, MetaEstimatorMixin, metaclass=ABCMeta)
                 y_pred /= y_pred.sum(axis=1, keepdims=True)
 
                 self._losses[:, i] = -xlogy(Y, y_pred).sum(axis=1)
+                print(self._losses)
                 lw, rw = max(0, i + 1 - self.window), i + 1
                 self.sample_weights_[sample_quality == 0, i + 1] = self._density_ratio(
                     self._losses[sample_quality == 0, lw:rw],
                     self._losses[sample_quality == 1, lw:rw],
                 )
+                print(self.sample_weights_)
 
         return self
 
