@@ -88,7 +88,7 @@ class RandomSampleQuality(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):
         KKMM(LogisticRegression()),
         TrAdaBoostClassifier(LogisticRegression(), n_estimators=2),
         IPDR(LogisticRegression(), n_estimators=2),
-        IKMM(LogisticRegression(), n_estimators=2),
+        IKMM(LogisticRegression(), B=2, n_estimators=2),
         BiqualityBaseline(
             SelfTrainingClassifier(LogisticRegression(), max_iter=2),
             baseline="semi_supervised",

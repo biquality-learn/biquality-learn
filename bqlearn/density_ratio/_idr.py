@@ -137,7 +137,7 @@ class IDR(BaseEstimator, ClassifierMixin, MetaEstimatorMixin, metaclass=ABCMeta)
                 )
                 assert np.all(
                     np.isfinite(self.sample_weights_[sample_quality == 0, i + 1])
-                )
+                ), self.sample_weights_[sample_quality == 0, i + 1]
 
         return self
 
