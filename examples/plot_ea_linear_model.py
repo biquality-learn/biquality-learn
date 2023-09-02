@@ -17,6 +17,7 @@ from sklearn.base import clone
 from sklearn.datasets import fetch_openml, load_digits
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
+from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 
 from bqlearn.ea import EasyADAPT
@@ -64,8 +65,8 @@ s = clone(clf).fit(X_digits, y_digits)
 t = clone(clf).fit(X_usps, y_usps)
 
 # %% Train linear model from augmented dataset
-ea = EasyADAPT(clf)
-ea.fit(X, y, sample_quality=sample_quality)
+ea = make_pipeline(EasyADAPT(), clf)
+ea.fit(X, y, easyadapt__sample_quality=sample_quality)
 
 # %% Compute min and max coef of all estimators
 vmin = float("inf")
@@ -100,11 +101,11 @@ fig.suptitle(
 plt.show()
 
 # %% Plot augmented weights
-importances = np.split(ea.estimator_.coef_[0, :], 3)
+importances = np.split(ea[-1].coef_[0, :], 3)
 names = ["General", "Source", "Target"]
 
-vmin = np.min(ea.estimator_.coef_[0, :])
-vmax = np.max(ea.estimator_.coef_[0, :])
+vmin = np.min(ea[-1].coef_[0, :])
+vmax = np.max(ea[-1].coef_[0, :])
 
 fig, axs = plt.subplots(1, 3, figsize=(12, 4))
 for i, imp in enumerate(importances):
