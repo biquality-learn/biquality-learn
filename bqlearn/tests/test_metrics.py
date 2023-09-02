@@ -112,8 +112,6 @@ def test_gold_transition_matrix_absent_class():
     tm1_mod = np.c_[np.r_[tm1, np.zeros((1, n_classes))], np.zeros((n_classes + 1, 1))]
     tm1_mod[n_classes] = np.ones(n_classes + 1) / (n_classes + 1)
 
-    print(tm1_mod, tm2)
-
     assert np.allclose(tm1_mod, tm2)
 
 

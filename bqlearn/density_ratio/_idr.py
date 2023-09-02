@@ -127,17 +127,13 @@ class IDR(BaseEstimator, ClassifierMixin, MetaEstimatorMixin, metaclass=ABCMeta)
                 eps = np.finfo(y_pred.dtype).eps
                 np.clip(y_pred, eps, 1 - eps, out=y_pred)
                 y_pred /= y_pred.sum(axis=1, keepdims=True)
-
                 self._losses[:, i] = -xlogy(Y, y_pred).sum(axis=1)
-                assert np.all(np.isfinite(self._losses[:, i]))
+
                 lw, rw = max(0, i + 1 - self.window), i + 1
                 self.sample_weights_[sample_quality == 0, i + 1] = self._density_ratio(
                     self._losses[sample_quality == 0, lw:rw],
                     self._losses[sample_quality == 1, lw:rw],
                 )
-                assert np.all(
-                    np.isfinite(self.sample_weights_[sample_quality == 0, i + 1])
-                ), self.sample_weights_[sample_quality == 0, i + 1]
 
         return self
 
