@@ -121,7 +121,8 @@ class KPDR(KDR):
         "Discriminative Learning for Differing Training and Test Distributions", 2007
 
     .. [2] P. Nodet, V. Lemaire, A. Bondu, A. Cornuéjols,\
-        "Design of Algorithms Dealing with Closed-Set Distribution Shifts", 2023.
+        "Biquality Learning: a Framework to Design Algorithms Dealing\
+        with Closed-Set Distribution Shifts.", ECML-PKDD, Machine Learning, 2023.
     """
 
     def __init__(

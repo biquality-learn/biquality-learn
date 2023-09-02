@@ -1,29 +1,22 @@
-import warnings
+import numbers
 
 import numpy as np
-from sklearn.model_selection import check_cv, PredefinedSplit
-from sklearn.utils.validation import _check_sample_weight, _num_samples
+from sklearn.model_selection import check_cv, StratifiedKFold
+from sklearn.utils.validation import _num_samples, indexable
 
 
-def make_biquality_cv(X, sample_quality, cv=None, *, y=None, groups=None):
-    """Utility function for building a biquality cross-validator.
+class BiqualityCrossValidator:
+    """Biquality cross-validator.
 
-    In the Biquality Data setup, cross-validators behave the same way as usual
-    cross-validators, but untrusted samples should be remove from the generated
-    test dataset.
+    In the Biquality Data setup, cross-validators split only trusted data.
+    All untrusted samples are present in each training splits and test sets contain
+    only trusted samples.
 
-    At the moment this cross-validator is made thanks to :class:`PredifinedSplit`
-    and untrusted samples are removed from all test sets generated
-    by the provided ``cv``. That's why each sample should be attributed
-    to only one test set at maximum, otherwise a warning is returned.
+    The `sample_quality` is provided through the `groups` argument
+    of the :meth:`split` method.
 
     Parameters
     ----------
-    X : array-like of shape (n_samples, n_features)
-        The samples.
-
-    sample_quality : array-like of shape (n_samples,)
-        The sample quality.
 
     cv : int, cross-validation generator or an iterable, default=None
         Determines the cross-validation splitting strategy.
@@ -33,42 +26,28 @@ def make_biquality_cv(X, sample_quality, cv=None, *, y=None, groups=None):
         - :term:`CV splitter`,
         - An iterable that generates (train, test) splits as arrays of indices.
 
-        For integer/None inputs, if ``y`` is either binary or multiclass,
-        :class:`StratifiedKFold` is used. In all other cases,
-        :class:`KFold` is used.
-
-    y : array-like of shape (n_samples,), default=None
-        The target variable.
-
-    groups : array-like of shape (n_samples,), default=None
-        Group labels for the samples used while splitting the dataset into
-        train/test set.
-
-    Returns
-    -------
-    biquality_cv : a cross-validator instance.
-        The return value is a cross-validator which generates the train/test
-        splits via the ``split`` method.
+        For integer/None inputs, :class:`StratifiedKFold` is used.
     """
 
-    sample_quality = _check_sample_weight(sample_quality, X)
+    def __init__(self, cv=None):
+        cv = 5 if cv is None else cv
+        if isinstance(cv, numbers.Integral):
+            cv = StratifiedKFold(cv)
+        self.cv = check_cv(cv)
 
-    cv = check_cv(cv, y, classifier=True)
+    def split(self, X, y, groups=None):
+        X, y, groups = indexable(X, y, groups)
 
-    n_samples = _num_samples(X)
+        if groups is None:
+            groups = np.ones(_num_samples(X))
 
-    folds = np.full(n_samples, -1.0)
+        trusted = np.flatnonzero(groups == 1)
+        untrusted = np.flatnonzero(groups == 0)
 
-    for i, (_, test) in enumerate(cv.split(X, y, groups)):
-        if np.any(folds[test] != -1):
-            warnings.warn(
-                "Some samples appeared in multiple test sets, the last test found"
-                " overrides the previously found test set for these samples.",
-                UserWarning,
-            )
+        mask = groups == 1
 
-        folds[test] = i
+        for train, test in self.cv.split(X[mask], y[mask], groups[mask]):
+            yield np.concatenate((trusted[train], untrusted)), trusted[test]
 
-    folds[sample_quality == 0] = -1
-
-    return PredefinedSplit(folds)
+    def get_n_splits(self, X=None, y=None, groups=None):
+        return self.cv.get_n_splits(X, y, groups)

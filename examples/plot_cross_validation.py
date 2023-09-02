@@ -7,23 +7,21 @@ Any cross-validators working for usual Supervised Learning can work
 in the case of Biquality Learning. However, when splitting the data into
 a train and test set, untrusted samples need to be removed from the test set
 to avoid computing supervised metrics on corrupted labels.
-That is why ``make_biquality_cv`` is provided by biquality-learn
-to post-process any scikit-learn compatible cross-validators.
+That is why ``BiqualityCrossValidator`` is provided by biquality-learn
+to override any scikit-learn compatible cross-validators.
 """
 
-import warnings
 from time import time
 
 import numpy as np
 import scipy.stats as stats
 from sklearn.datasets import load_digits
-from sklearn.exceptions import ConvergenceWarning
 from sklearn.linear_model import SGDClassifier
 from sklearn.model_selection import RandomizedSearchCV, StratifiedShuffleSplit
 
 from bqlearn.corruptions import make_label_noise
 from bqlearn.density_ratio import KKMM
-from bqlearn.model_selection import make_biquality_cv
+from bqlearn.model_selection import BiqualityCrossValidator
 
 # get some data
 X, y = load_digits(return_X_y=True, n_class=2)
@@ -39,7 +37,9 @@ sample_quality = np.ones_like(y)
 sample_quality[untrusted] = 0
 
 # build a classifier
-clf = SGDClassifier(loss="log_loss", penalty="elasticnet", fit_intercept=True)
+clf = SGDClassifier(
+    loss="log_loss", penalty="elasticnet", fit_intercept=True, random_state=1
+)
 bq_clf = KKMM(clf, n_jobs=-1)
 
 
@@ -72,13 +72,12 @@ random_search = RandomizedSearchCV(
     bq_clf,
     param_distributions=param_dist,
     n_iter=n_iter_search,
-    cv=make_biquality_cv(X, sample_quality, cv=3),
+    cv=BiqualityCrossValidator(cv=3),
+    random_state=1,
 )
 
 start = time()
-with warnings.catch_warnings():
-    warnings.filterwarnings("ignore", category=ConvergenceWarning)
-    random_search.fit(X, y, sample_quality=sample_quality)
+random_search.fit(X, y, groups=sample_quality, sample_quality=sample_quality)
 print(
     "RandomizedSearchCV took %.2f seconds for %d candidates parameter settings."
     % ((time() - start), n_iter_search)
