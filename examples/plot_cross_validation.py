@@ -20,10 +20,9 @@ from sklearn.datasets import load_digits
 from sklearn.exceptions import ConvergenceWarning
 from sklearn.linear_model import SGDClassifier
 from sklearn.model_selection import RandomizedSearchCV, StratifiedShuffleSplit
-from sklearn.utils.fixes import loguniform
 
 from bqlearn.corruptions import make_label_noise
-from bqlearn.density_ratio import KPDR
+from bqlearn.density_ratio import KKMM
 from bqlearn.model_selection import make_biquality_cv
 
 # get some data
@@ -41,7 +40,7 @@ sample_quality[untrusted] = 0
 
 # build a classifier
 clf = SGDClassifier(loss="log_loss", penalty="elasticnet", fit_intercept=True)
-bq_clf = KPDR(clf, n_jobs=-1)
+bq_clf = KKMM(clf, n_jobs=-1)
 
 
 # Utility function to report best scores
@@ -64,7 +63,7 @@ def report(results, n_top=3):
 param_dist = {
     "estimator__average": [True, False],
     "estimator__l1_ratio": stats.uniform(0, 1),
-    "estimator__alpha": loguniform(1e-5, 1e0),
+    "estimator__alpha": stats.loguniform(1e-5, 1e0),
 }
 
 # run randomized search
