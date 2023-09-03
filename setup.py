@@ -29,7 +29,7 @@ setup(
     long_description_content_type="text/markdown",
     keywords="biquality-learn",
     license="BSD 3-Clause",
-    url="https://biquality-learn.readthedocs.io/en/stable/",
+    url="https://biquality-learn.readthedocs.io/",
     project_urls={
         "Source Code": "https://github.com/biquality-learn/biquality-learn"
     },
