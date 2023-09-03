@@ -8,7 +8,7 @@ in the case of Biquality Learning. However, when splitting the data into
 a train and test set, untrusted samples need to be removed from the test set
 to avoid computing supervised metrics on corrupted labels.
 That is why ``BiqualityCrossValidator`` is provided by biquality-learn
-to override any scikit-learn compatible cross-validators.
+to accommodate any scikit-learn compatible cross-validators to biquality data.
 """
 
 from time import time

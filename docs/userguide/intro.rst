@@ -166,8 +166,8 @@ the case of Biquality Learning. However, when splitting the data into a
 train and test set, untrusted samples need to be removed from the test
 set to avoid computing supervised metrics on corrupted labels. That is
 why :func:`bqlearn.model_selection.BiqualityCrossValidator` is provided
-by **biquality-learn** to post-process any **scikit-learn** compatible
-cross-validators.
+by **biquality-learn** to accommodate any **scikit-learn** compatible
+cross-validators to biquality data.
 
 Here is an example of how to use **scikit-learn**\ ’s
 :class:`sklearn.model_selection.RandomizedSearchCV` function

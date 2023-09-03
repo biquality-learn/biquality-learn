@@ -9,12 +9,12 @@
 
 ## Biquality Learning
 
-Biquality Learning is a machine learning framework to train classifiers on Biquality Data, composed of an untrusted and a trusted dataset:
+Biquality Learning is a machine learning framework to train classifiers on Biquality Data, where the dataset is split into a trusted and an untrusted part:
 
 * The ***trusted*** dataset contains trustworthy samples with clean labels and proper feature distribution.
 * The ***untrusted*** dataset contains potentially corrupted samples from label noise or covariate shift (distribution shift).
 
-**biquality-learn** aims at making well-known and proven biquality learning algorithms *accessible* to everyone and help researchers experiment in a *reproducible* way on biquality data.
+**biquality-learn** aims at making well-known and proven biquality learning algorithms *accessible* and *easy to use* for everyone and enabling researchers to experiment in a *reproducible* way on biquality data.
 
 ## Install
 
