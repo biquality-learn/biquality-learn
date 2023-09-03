@@ -73,7 +73,7 @@ estimation procedure is used on these sub-datasets to estimate
 :math:`\mathbb{P}_T(X \mid Y=y)/\mathbb{P}_U(X \mid Y=y)`. When repeated on all classes, this
 approach does handle distribution shifts.
 
-This approach is implemented in :class:`KPDR` and :class:`KKMM` [FNS2020]_ with
+This approach is implemented in :class:`KPDR` [NLBC2023]_ and :class:`KKMM` [FNS2020]_ with
 two different density ratio estimation algorithms, :func:`pdr` [BBS2007]_ and :func:`kmm` [HSGBS2006]_ respectively.
 
 .. figure:: ../auto_examples/images/sphx_glr_plot_kdr_001.png
@@ -90,9 +90,11 @@ Moreover, :class:`KKMM` implement a batched version for scalability [YAM2015]_.
 
 .. topic:: References:
 
- .. [BBS2007] S. Bickel, M. Bruckner, T. Scheffer, "Discriminative Learning for Differing Training and Test Distributions", 2007
+ .. [NLBC2023] P. Nodet, V. Lemaire, A. Bondu, A. Cornuéjols, "Biquality Learning: a Framework to Design Algorithms Dealing with Closed-Set Distribution Shifts.", Machine Learning, 2023.
 
  .. [FNS2020]  Fang, T., Lu, N., Niu, G., and Sugiyama, M. "Rethinking importance weighting for deep learning under distribution shift.", NeurIPS 2020
+
+ .. [BBS2007] S. Bickel, M. Bruckner, T. Scheffer, "Discriminative Learning for Differing Training and Test Distributions", 2007
 
  .. [HSGBS2006] Huang, J. and Smola, A. and Gretton, A. and Borgwardt, KM. and Schölkopf, B., "Correcting Sample Selection Bias by Unlabeled Data", 2006
 
@@ -113,7 +115,7 @@ A *third approach* is to focus on the density ratio estimation task by finding a
 
 An example of such transformation :math:`f` is the classification loss of a model learned on the biquality data.
 
-This approach is implemented in :class:`IPDR` and :class:`IKMM` [FNS2020]_.
+This approach is implemented in :class:`IPDR` [L2018]_ and :class:`IKMM` [FNS2020]_.
 
 .. figure:: ../auto_examples/images/sphx_glr_plot_idr_001.png
    :target: ../auto_examples/plot_idr.html
