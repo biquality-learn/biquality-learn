@@ -14,6 +14,7 @@ from bqlearn.irbl import IRBL
 from bqlearn.irlnl import IRLNL
 from bqlearn.multiclass import WeightedOneVsRestClassifier
 from bqlearn.plugin import PluginCorrection
+from bqlearn.bilevel import SelfPacedRobustLearning
 from bqlearn.tradaboost import TrAdaBoostClassifier
 from bqlearn.unbiased import LossCorrection
 from bqlearn.unhinged import KernelUnhinged, LinearUnhinged
@@ -97,6 +98,7 @@ class RandomSampleQuality(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):
             SelfTrainingClassifier(LogisticRegression(), max_iter=2),
             baseline="semi_supervised",
         ),
+        SelfPacedRobustLearning(LogisticRegression(), max_iter=2, tol=0),
     ]
 )
 def test_all_biquality_estimators(estimator, check):
