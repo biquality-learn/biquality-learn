@@ -4,7 +4,7 @@ import numpy as np
 import pytest
 from sklearn.utils._testing import assert_array_equal
 
-from .. import make_cluster_imbalance, make_imbalance
+from bqlearn.corruptions import make_cluster_imbalance, make_imbalance
 
 
 def test_make_imbalance():

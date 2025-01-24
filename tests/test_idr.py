@@ -3,7 +3,7 @@ import pytest
 from sklearn.datasets import make_classification
 from sklearn.tree import DecisionTreeClassifier
 
-from .. import IKMM, IPDR
+from bqlearn.density_ratio import IKMM, IPDR
 
 
 @pytest.mark.parametrize(

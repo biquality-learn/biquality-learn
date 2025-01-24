@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 from sklearn.linear_model import LogisticRegression
 
-from .. import kmm, pdr
+from bqlearn.density_ratio import kmm, pdr
 
 
 def test_empty_dr():
