@@ -27,7 +27,7 @@ Issues = "https://github.com/biquality-learn/biquality-learn/issues"
 Source = "https://github.com/biquality-learn/biquality-learn"
 
 [tool.hatch.build.targets.wheel]
-packages = ["bqlearn"]
+packages = ["src/bqlearn"]
 
 [tool.hatch.version]
 source = "vcs"
