@@ -25,13 +25,13 @@ def gold_transition_matrix(y_true, y_prob, labels=None):
 
     .. math::
 
-        \hat{T}_{(i,*)} = \\frac{1}{|D^i_T|}\sum_{x_i \in D^i_T}f_U(x_i)
+        \\hat{T}_{(i,*)} = \\frac{1}{|D^i_T|}\\sum_{x_i \\in D^i_T}f_U(x_i)
 
     where:
 
     .. math::
 
-        \\forall k \in [\![1,K]\!], D^k_T = \{\\forall (x,y) \in D_T  \mid  y=k\}
+        \\forall k \\in [\\![1,K]\\!], D^k_T = \\{\\forall (x,y) \\in D_T  \\mid  y=k\\}
 
     and $K$ is the number of class.
 
@@ -128,16 +128,16 @@ def anchor_transition_matrix(y_prob, quantile=0.97, anchor_idx=None):
 
     .. math::
 
-        \\forall i \in [\![1,K]\!], A_i =
-        \operatorname*{argmax}_{x \in D} \mathbb{P}(Y=i|X=x)
+        \\forall i \\in [\\![1,K]\\!], A_i =
+        \\operatorname*{argmax}_{x \\in D} \\mathbb{P}(Y=i|X=x)
 
     Then it uses predictions of a model learned on untrusted data to estimate
     the transition matrix.
 
     .. math::
 
-        \\forall (i,j) \in [\![1,K]\!]^2, \hat{T}_{(i,j)}
-        = \mathbb{P}(\\tilde{Y}=j|X=A_i)
+        \\forall (i,j) \\in [\\![1,K]\\!]^2, \\hat{T}_{(i,j)}
+        = \\mathbb{P}(\\tilde{Y}=j|X=A_i)
 
     Parameters
     ----------

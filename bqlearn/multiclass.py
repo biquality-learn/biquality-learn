@@ -4,9 +4,9 @@ import warnings
 
 import numpy as np
 import scipy.sparse as sp
-from joblib import delayed, Parallel
+from joblib import Parallel, delayed
 from sklearn.base import clone
-from sklearn.multiclass import _ConstantPredictor, _estimators_has, OneVsRestClassifier
+from sklearn.multiclass import OneVsRestClassifier, _ConstantPredictor, _estimators_has
 from sklearn.preprocessing import LabelBinarizer
 from sklearn.utils import check_array, check_consistent_length
 from sklearn.utils.metaestimators import available_if

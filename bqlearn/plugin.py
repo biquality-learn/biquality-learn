@@ -35,10 +35,10 @@ class PluginCorrection(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):
     """A Noise Corrected Plug-in Classifier.
 
     PluginCorrection [1]_ learns a classifier on noisy data
-    and uses a noise transition matrix :math:`\mathbf{T}` at prediction time (plug-in)
+    and uses a noise transition matrix :math:`\\mathbf{T}` at prediction time (plug-in)
     to correct the classifier.
 
-    .. math:: \\forall x \in \mathcal{X}, f_T(x)=(\mathbf{T}^{t})^{-1}\cdot f_U(x)
+    .. math:: \\forall x \\in \\mathcal{X}, f_T(x)=(\\mathbf{T}^{t})^{-1}\\cdot f_U(x)
 
     Parameters
     ----------

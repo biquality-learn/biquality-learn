@@ -1,7 +1,7 @@
 import numbers
 
 import numpy as np
-from sklearn.model_selection import check_cv, StratifiedKFold
+from sklearn.model_selection import StratifiedKFold, check_cv
 from sklearn.utils.validation import _num_samples, indexable
 
 

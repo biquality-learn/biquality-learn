@@ -1,7 +1,7 @@
 """Baselines for Biquality Learning"""
 
 import numpy as np
-from sklearn.base import BaseEstimator, ClassifierMixin, clone, MetaEstimatorMixin
+from sklearn.base import BaseEstimator, ClassifierMixin, MetaEstimatorMixin, clone
 from sklearn.utils import check_array, safe_mask
 from sklearn.utils.metaestimators import available_if
 from sklearn.utils.multiclass import check_classification_targets, unique_labels

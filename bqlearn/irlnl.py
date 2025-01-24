@@ -41,12 +41,12 @@ class IRLNL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):
 
     .. math::
 
-        \\frac{\mathbb{P}(Y=y|X)}{\mathbb{P}(\\tilde{Y}=y|X)} =
-        \\frac{\mathbb{P}(\\tilde{Y}=y|X) - \mathbb{1}_{\\tilde{Y}=y} \\times \mathbb{P}
-        (\\tilde{Y}= y | Y\\neq y ) - \mathbb{1}_{\\tilde{Y}\\neq y} \\times \mathbb{P}
-        (\\tilde{Y}\\neq y | Y =y )}
-        {\left(1 -  \mathbb{P}(\\tilde{Y}= y | Y\\neq y ) -
-        \mathbb{P}(\\tilde{Y}\\neq y | Y =y )\\right)\mathbb{P}(\\tilde{Y}=y|X)}
+        \\frac{\\mathbb{P}(Y=y|X)}{\\mathbb{P}(\\tilde{Y}=y|X)} =
+        \\frac{\\mathbb{P}(\\tilde{Y}=y|X) - \\mathbb{1}_{\\tilde{Y}=y}
+        \\times \\mathbb{P}(\\tilde{Y}= y | Y\\neq y ) - \\mathbb{1}_{\\tilde{Y}\\neq y}
+        \\times \\mathbb{P}(\\tilde{Y}\\neq y | Y =y )}
+        {\\left(1 -  \\mathbb{P}(\\tilde{Y}= y | Y\\neq y ) -
+        \\mathbb{P}(\\tilde{Y}\\neq y | Y =y )\\right)\\mathbb{P}(\\tilde{Y}=y|X)}
 
     It does support multiclass classification thanks to a One versus Rest approach [2]_.
 

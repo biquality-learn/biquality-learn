@@ -1,7 +1,7 @@
 """Importance Reweighting for Biquality Learning."""
 
 import numpy as np
-from sklearn.base import BaseEstimator, ClassifierMixin, clone, MetaEstimatorMixin
+from sklearn.base import BaseEstimator, ClassifierMixin, MetaEstimatorMixin, clone
 from sklearn.preprocessing import label_binarize
 from sklearn.utils import check_array
 from sklearn.utils.metaestimators import available_if
