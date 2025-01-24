@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 from sklearn.linear_model import LogisticRegression
 
-from .. import KKMM, KPDR
+from bqlearn.density_ratio import KKMM, KPDR
 
 
 @pytest.mark.parametrize("n_classes", [10, 20])

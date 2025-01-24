@@ -32,6 +32,9 @@ packages = ["bqlearn"]
 [tool.hatch.version]
 source = "vcs"
 
+[tool.hatch.envs.hatch-test]
+extra-dependencies = ["pandas"]
+
 [tool.coverage.run]
 omit = ["tests"]
 

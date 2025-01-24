@@ -12,7 +12,7 @@ def test_sampling_biais_small_a():
 
     X_biaised = make_sampling_biais(X, a=0.9, random_state=0)
 
-    assert np.mean(X_biaised) < np.mean(X)
+    assert np.mean(X_biaised) > np.mean(X)
 
 
 def test_sampling_biais_big_a():
@@ -22,7 +22,7 @@ def test_sampling_biais_big_a():
 
     X_biaised = make_sampling_biais(X, a=1.1, random_state=0)
 
-    assert np.mean(X_biaised) > np.mean(X)
+    assert np.mean(X_biaised) < np.mean(X)
 
 
 def test_sampling_biais_a_equals_one():

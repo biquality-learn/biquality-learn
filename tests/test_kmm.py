@@ -3,7 +3,7 @@ import pytest
 from sklearn.datasets import make_classification
 from sklearn.linear_model import LogisticRegression
 
-from .._kmm import IKMM, KKMM
+from bqlearn.density_ratio import IKMM, KKMM
 
 
 @pytest.mark.parametrize("batch_size", [-1, 0, 1.2])
