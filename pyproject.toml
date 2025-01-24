@@ -29,6 +29,9 @@ Source = "https://github.com/biquality-learn/biquality-learn"
 [tool.hatch.build.targets.wheel]
 packages = ["src/bqlearn"]
 
+[tool.ruff.lint.isort]
+known-first-party = ["bqlearn"]
+
 [tool.hatch.version]
 source = "vcs"
 
@@ -36,7 +39,7 @@ source = "vcs"
 extra-dependencies = ["pandas"]
 
 [tool.coverage.run]
-omit = ["tests"]
+omit = ["tests/*"]
 
 [tool.ruff]
 line-length = 88
