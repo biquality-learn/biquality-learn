@@ -65,12 +65,12 @@ def make_sampling_biais(
     check_scalar(a, "a", (float, int), min_val=0, include_boundaries="neither")
     check_scalar(b, "b", (float, int), min_val=0, include_boundaries="neither")
 
-    mean = np.mean(X_first_axis)
-    min = np.min(X_first_axis)
+    xmean = np.mean(X_first_axis)
+    xmin = np.min(X_first_axis)
 
-    loc = min + (mean - min) / a
+    loc = xmin + (xmean - xmin) / a
     eps = np.finfo(float).eps
-    scale = math.sqrt((mean - min) / b) + eps
+    scale = math.sqrt((xmean - xmin) / b) + eps
 
     sampling_prob = norm.pdf(X_first_axis, loc=loc, scale=scale)
 

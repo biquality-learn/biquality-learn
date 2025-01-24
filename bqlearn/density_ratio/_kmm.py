@@ -5,7 +5,7 @@ import warnings
 
 import numpy as np
 import scipy.sparse as sp
-from joblib import delayed, Parallel
+from joblib import Parallel, delayed
 from scs import solve
 from sklearn.metrics import pairwise
 from sklearn.utils import check_symmetric, gen_batches

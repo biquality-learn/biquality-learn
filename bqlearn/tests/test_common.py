@@ -1,5 +1,5 @@
 import numpy as np
-from sklearn.base import BaseEstimator, ClassifierMixin, clone, MetaEstimatorMixin
+from sklearn.base import BaseEstimator, ClassifierMixin, MetaEstimatorMixin, clone
 from sklearn.linear_model import LogisticRegression, SGDClassifier
 from sklearn.model_selection import StratifiedShuffleSplit
 from sklearn.semi_supervised import SelfTrainingClassifier

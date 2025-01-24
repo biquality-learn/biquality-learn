@@ -1,7 +1,7 @@
 import warnings
 
 import numpy as np
-from joblib import delayed, Parallel
+from joblib import Parallel, delayed
 from sklearn import clone
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import LabelEncoder

@@ -3,7 +3,7 @@
 import numpy as np
 import scipy.sparse as sp
 from scipy.sparse import issparse
-from sklearn.base import BaseEstimator, check_is_fitted, TransformerMixin
+from sklearn.base import BaseEstimator, TransformerMixin, check_is_fitted
 from sklearn.utils.validation import (
     _check_feature_names_in,
     _check_sample_weight,
@@ -18,21 +18,21 @@ class EasyADAPT(BaseEstimator, TransformerMixin):
     """A Frustratingly Easy approach to Domain Adaptation.
 
     EasyADAPT [1]_ creates an augmented input space
-    :math:`\\tilde{\mathcal{X}} = \mathcal{X}^3`
+    :math:`\\tilde{\\mathcal{X}} = \\mathcal{X}^3`
     with two different mapping for untrusted and trusted samples,
-    :math:`\Psi_U:\mathcal{X}\mapsto \\tilde{\mathcal{X}}` and
-    :math:`\Psi_T:\mathcal{X}\mapsto \\tilde{\mathcal{X}}`.
+    :math:`\\Psi_U:\\mathcal{X}\\mapsto \\tilde{\\mathcal{X}}` and
+    :math:`\\Psi_T:\\mathcal{X}\\mapsto \\tilde{\\mathcal{X}}`.
 
     -  ..math::
-        \\forall \mathbf{x} \in \mathcal{X},
-        \Psi_U(\mathbf{x})=<\mathbf{x}, \mathbf{x}, \mathbf{0}>
+        \\forall \\mathbf{x} \\in \\mathcal{X},
+        \\Psi_U(\\mathbf{x})=<\\mathbf{x}, \\mathbf{x}, \\mathbf{0}>
 
     -  ..math::
-        \\forall \mathbf{x} \in \mathcal{X},
-        \Psi_T(\mathbf{x})=<\mathbf{x}, \mathbf{0}, \mathbf{x}>
+        \\forall \\mathbf{x} \\in \\mathcal{X},
+        \\Psi_T(\\mathbf{x})=<\\mathbf{x}, \\mathbf{0}, \\mathbf{x}>
 
-    This augmented domain :math:`\\tilde{\mathcal{X}}` allow for the classifier to learn
-    different relation between the features and the target differently
+    This augmented domain :math:`\\tilde{\\mathcal{X}}` allow for the classifier to
+    learn different relation between the features and the target differently
     for the untrusted, trusted and general domain.
 
     Attributes

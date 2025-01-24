@@ -1,12 +1,11 @@
 """Method of Unbiased Estimators."""
 
-
 import numpy as np
 import scipy.sparse as sp
 from scipy.sparse import issparse
 from sklearn import clone
 from sklearn.base import BaseEstimator, ClassifierMixin, MetaEstimatorMixin
-from sklearn.preprocessing import label_binarize, LabelEncoder
+from sklearn.preprocessing import LabelEncoder, label_binarize
 from sklearn.utils import check_scalar
 from sklearn.utils.metaestimators import available_if
 from sklearn.utils.multiclass import check_classification_targets
@@ -40,13 +39,13 @@ class LossCorrection(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):
     """A Classifier corrected with the method of unbiased estimators [1]_.
 
     It construts a surrogate loss :math:`\\tilde{L}` from the loss of interest :math:`L`
-    such that :math:`\mathbb{E}_{\\tilde{y}}[\\tilde{L}(f(x),\\tilde{y})] = L(f(x),y)`.
+    such that :math:`\\mathbb{E}_{\\tilde{y}}[\\tilde{L}(f(x),\\tilde{y})] = L(f(x),y)`.
 
     .. math::
 
-        \\tilde{L}(f(x),y) = \\frac{(1-\mathbb{P}(\\tilde{Y}= y|Y\\neq ))L(f(x), y)
-        - \mathbb{P}(\\tilde{Y}\\neq y | Y =y ) L(f(x), -y) }
-        {1 - \mathbb{P}(\\tilde{Y}= y| Y\\neq y ) - \mathbb{P}(\\tilde{Y}\\neq |Y =y)}
+        \\tilde{L}(f(x),y) = \\frac{(1-\\mathbb{P}(\\tilde{Y}= y|Y\\neq ))L(f(x), y)
+        - \\mathbb{P}(\\tilde{Y}\\neq y | Y =y ) L(f(x), -y) }
+        {1 - \\mathbb{P}(\\tilde{Y}= y| Y\\neq y ) - \\mathbb{P}(\\tilde{Y}\\neq |Y =y)}
 
     It does support multiclass classification thanks to a One versus Rest approach.
 

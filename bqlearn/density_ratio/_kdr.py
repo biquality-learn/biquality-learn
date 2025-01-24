@@ -3,8 +3,8 @@
 from abc import ABCMeta, abstractmethod
 
 import numpy as np
-from joblib import delayed, Parallel
-from sklearn.base import BaseEstimator, ClassifierMixin, clone, MetaEstimatorMixin
+from joblib import Parallel, delayed
+from sklearn.base import BaseEstimator, ClassifierMixin, MetaEstimatorMixin, clone
 from sklearn.preprocessing import LabelEncoder
 from sklearn.utils import check_array, safe_mask
 from sklearn.utils.metaestimators import available_if

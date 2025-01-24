@@ -4,7 +4,7 @@ from abc import ABCMeta, abstractmethod
 
 import numpy as np
 from scipy.special import xlogy
-from sklearn.base import BaseEstimator, ClassifierMixin, clone, MetaEstimatorMixin
+from sklearn.base import BaseEstimator, ClassifierMixin, MetaEstimatorMixin, clone
 from sklearn.preprocessing import LabelBinarizer, LabelEncoder
 from sklearn.utils import check_array, check_scalar
 from sklearn.utils.metaestimators import available_if
