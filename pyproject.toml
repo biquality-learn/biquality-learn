@@ -9,11 +9,22 @@ description = 'biquality-learn is a library à la scikit-learn for Biquality Lea
 readme = "README.md"
 requires-python = ">=3.9"
 license = "BSD-3-Clause"
-keywords = []
 authors = [
   { name = "Pierre Nodet", email = "pierre.nodet@orange.com" },
 ]
-classifiers = []
+classifiers = [
+  "Intended Audience :: Science/Research",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: BSD License",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+]
 dependencies = [
   "numpy",
   "scipy",
@@ -35,8 +46,13 @@ known-first-party = ["bqlearn"]
 [tool.hatch.version]
 source = "vcs"
 
-[tool.hatch.envs.hatch-test]
-extra-dependencies = ["pandas"]
+[dependency-groups]
+dev=[
+  "pandas", 
+  "pytest", 
+  "pytest-cov", 
+  "pytest-xdist",
+]
 
 [tool.coverage.run]
 omit = ["tests/*"]
