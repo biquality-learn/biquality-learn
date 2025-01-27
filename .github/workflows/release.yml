@@ -9,19 +9,15 @@ jobs:
   release:
 
     runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/biquality-learn
+    permissions:
+      id-token: write
 
     steps:
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-    - uses: actions/setup-python@v4
-    - name: Install twine
-      run: |
-        pip install setuptools wheel twine
-    - name: Build and publish
-      env:
-        TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
-        TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-      run: |
-        python setup.py sdist bdist_wheel
-        twine upload dist/*
+    - uses: actions/checkout@v4
+    - uses: astral-sh/setup-uv@v5
+    - uses: actions/setup-python@v5
+    - run: uv build 
+    - uses: pypa/gh-action-pypi-publish@release/v1
