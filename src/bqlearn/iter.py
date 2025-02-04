@@ -1,6 +1,5 @@
 import warnings
 from functools import singledispatch
-from typing import Generator
 
 from sklearn.ensemble import (
     BaggingClassifier,
@@ -23,7 +22,7 @@ from sklearn.neural_network import MLPClassifier, MLPRegressor
 
 
 @singledispatch
-def iterative[T](estimator: T, steps: int = 1, reset: bool = True) -> Generator[T]:
+def iterative(estimator, steps: int = 1, reset: bool = True):
     raise NotImplementedError(
         f"{estimator.__class__.__name__} doesn't support iterative"
         " learning. Register the estimator class to iterative."
