@@ -1,6 +1,7 @@
 """Iterative Density Ratio Estimation for Biquality Learning."""
 
 from abc import ABCMeta, abstractmethod
+from itertools import islice, repeat
 
 import numpy as np
 from scipy.special import xlogy
@@ -10,6 +11,8 @@ from sklearn.utils import check_array, check_scalar
 from sklearn.utils.metaestimators import available_if
 from sklearn.utils.multiclass import check_classification_targets
 from sklearn.utils.validation import _num_samples, check_is_fitted, has_fit_parameter
+
+from bqlearn.iter import iterative
 
 
 def _estimator_has(attr):
@@ -92,38 +95,24 @@ class IDR(BaseEstimator, ClassifierMixin, MetaEstimatorMixin, metaclass=ABCMeta)
                 "%s doesn't support sample_weight." % self.estimator.__class__.__name__
             )
 
-        if self.exploit_iterative_learning and not hasattr(
-            self.estimator, "warm_start"
-        ):
-            raise ValueError(
-                "%s doesn't support iterative learning."
-                % self.estimator.__class__.__name__
-            )
-
         check_scalar(
             self.n_estimators, "n_estimators", int, min_val=1, include_boundaries="left"
         )
         check_scalar(self.window, "window", int, min_val=1, include_boundaries="left")
 
-        estimator_param_names = self.estimator.get_params().keys()
-
         self.sample_weights_ = np.ones((n_samples, self.n_estimators))
         self._losses = np.empty((n_samples, self.n_estimators))
-        self.estimator_ = clone(self.estimator)
 
-        for i in range(0, self.n_estimators):
-            if self.exploit_iterative_learning:
-                if "n_estimators" in estimator_param_names:
-                    self.estimator_.set_params(n_estimators=i + 1)
-                if "max_iter" in estimator_param_names:
-                    self.estimator_.set_params(max_iter=i + 1)
-            else:
-                self.estimator_ = clone(self.estimator)
+        if self.exploit_iterative_learning:
+            stages = iterative(clone(self.estimator))
+        else:
+            stages = repeat(clone(self.estimator))
 
-            self.estimator_.fit(X, y, sample_weight=self.sample_weights_[:, i])
+        for i, stage in enumerate(islice(stages, self.n_estimators)):
+            stage.fit(X, y, sample_weight=self.sample_weights_[:, i])
 
             if i < self.n_estimators - 1:
-                y_pred = self.estimator_.predict_proba(X)
+                y_pred = stage.predict_proba(X)
                 eps = np.finfo(y_pred.dtype).eps
                 np.clip(y_pred, eps, 1 - eps, out=y_pred)
                 y_pred /= y_pred.sum(axis=1, keepdims=True)
@@ -134,6 +123,8 @@ class IDR(BaseEstimator, ClassifierMixin, MetaEstimatorMixin, metaclass=ABCMeta)
                     self._losses[sample_quality == 0, lw:rw],
                     self._losses[sample_quality == 1, lw:rw],
                 )
+
+        self.estimator_ = stage
 
         return self
 
