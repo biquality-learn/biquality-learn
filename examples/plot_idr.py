@@ -48,9 +48,7 @@ if Y_corrupted.shape[1] == 1:
     Y_corrupted = np.hstack((1 - Y_corrupted, Y_corrupted))
 
 # %%
-gbm = GradientBoostingClassifier(
-    n_estimators=1, warm_start=True, learning_rate=0.05, max_depth=3, random_state=seed
-)
+gbm = GradientBoostingClassifier(learning_rate=0.05, max_depth=3, random_state=seed)
 n_estimators = 100
 ipdr = IPDR(gbm, exploit_iterative_learning=True, n_estimators=n_estimators)
 ipdr.fit(X_train, y_corrupted, sample_quality=sample_quality)

@@ -28,7 +28,7 @@ def test_idr_exploit_warning(idr):
     sample_quality = rng.randint(0, 2, size=n_samples)
 
     idr.set_params(exploit_iterative_learning=True)
-    with pytest.raises(ValueError):
+    with pytest.raises(NotImplementedError):
         idr.fit(X, y, sample_quality=sample_quality)
 
     idr.set_params(exploit_iterative_learning=False)

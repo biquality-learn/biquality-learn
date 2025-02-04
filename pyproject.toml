@@ -51,7 +51,9 @@ local_scheme = "no-local-version"
 
 [dependency-groups]
 dev=[
+  "ipykernel",
   "pandas", 
+  "matplotlib",
   "pytest", 
   "pytest-cov", 
   "pytest-xdist",
