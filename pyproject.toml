@@ -28,7 +28,7 @@ classifiers = [
 dependencies = [
   "numpy",
   "scipy",
-  "scikit-learn<=1.5.0",
+  "scikit-learn",
   "scs"
 ]
 
@@ -54,6 +54,7 @@ dev=[
   "ipykernel",
   "pandas", 
   "matplotlib",
+  "scikit-learn>=1.6.0",
   "pytest", 
   "pytest-cov", 
   "pytest-xdist",

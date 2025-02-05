@@ -25,7 +25,7 @@ def _final_estimator_has(attr):
     )
 
 
-class IRBL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):
+class IRBL(MetaEstimatorMixin, ClassifierMixin, BaseEstimator):
     """A Reweighted Classifier for Biquality Learning.
 
     An IRBL [1]_ classifier is a is a meta-algorithm that uses the covariate shift
@@ -213,3 +213,8 @@ class IRBL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):
         """
         check_is_fitted(self)
         return self.final_estimator_.predict_log_proba(X)
+
+    def __sklearn_tags__(self):
+        tags = super().__sklearn_tags__()
+        tags.input_tags.sparse = True
+        return tags

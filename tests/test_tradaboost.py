@@ -92,7 +92,7 @@ def test_tradaboost_recovers_adaboost():
 
     base_clf = DecisionTreeClassifier()
 
-    adaboost = AdaBoostClassifier(base_clf, algorithm="SAMME")
+    adaboost = AdaBoostClassifier(base_clf)
     tradaboost = TrAdaBoostClassifier(base_clf)
 
     adaboost.fit(X, y)

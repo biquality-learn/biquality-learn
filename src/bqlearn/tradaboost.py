@@ -163,9 +163,7 @@ class TrAdaBoostClassifier(AdaBoostClassifier):
             y_numeric=is_regressor(self),
         )
 
-        sample_weight = _check_sample_weight(
-            sample_weight, X, np.float64, copy=True, only_non_negative=True
-        )
+        sample_weight = _check_sample_weight(sample_weight, X, np.float64, copy=True)
         sample_weight /= sample_weight.sum()
 
         if sample_quality is not None:
@@ -315,6 +313,3 @@ class TrAdaBoostClassifier(AdaBoostClassifier):
             estimator_weight,
             estimator_error,
         )
-
-    def _more_tags(self):
-        return {"_xfail_checks": {"check_dict_unchanged": "tofix"}}

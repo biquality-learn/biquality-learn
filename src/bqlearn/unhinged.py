@@ -14,7 +14,7 @@ from sklearn.utils.validation import _check_sample_weight, check_is_fitted, chec
 __all__ = ["LinearUnhinged", "KernelUnhinged"]
 
 
-class LinearUnhinged(BaseEstimator, LinearClassifierMixin):
+class LinearUnhinged(LinearClassifierMixin, BaseEstimator):
     """Linear Unhinged Classification.
 
     Similar to KernelUnhinged with parameter kernel=’linear’, implemented
@@ -91,12 +91,12 @@ class LinearUnhinged(BaseEstimator, LinearClassifierMixin):
             self.alpha, "alpha", (float, int), min_val=0, include_boundaries="neither"
         )
 
-        label_binarizer = LabelBinarizer(pos_label=1, neg_label=-1).fit(y)
+        label_binarizer = LabelBinarizer(neg_label=-1).fit(y)
         self.classes_ = label_binarizer.classes_
         self.n_classes_ = len(self.classes_)
 
         if self.n_classes_ > 2:
-            raise ValueError("LinearUnhinged only supports binary classification.")
+            raise ValueError("Only binary classification is supported.")
 
         y = label_binarizer.transform(y)
         y = column_or_1d(y)
@@ -116,11 +116,17 @@ class LinearUnhinged(BaseEstimator, LinearClassifierMixin):
 
         return self
 
+    def __sklearn_tags__(self):
+        tags = super().__sklearn_tags__()
+        tags.classifier_tags.multi_class = False
+        tags.input_tags.sparse = True
+        return tags
+
     def _more_tags(self):
         return {"binary_only": True}
 
 
-class KernelUnhinged(BaseEstimator, ClassifierMixin):
+class KernelUnhinged(ClassifierMixin, BaseEstimator):
     """Kernel Unhinged Classification.
 
     Kernel Unhinged Classification (KUC) [1]_ combines unhinged classification with the
@@ -221,9 +227,6 @@ class KernelUnhinged(BaseEstimator, ClassifierMixin):
             params = {"gamma": self.gamma, "degree": self.degree, "coef0": self.coef0}
         return pairwise_kernels(X, Y, metric=self.kernel, filter_params=True, **params)
 
-    def _more_tags(self):
-        return {"pairwise": self.kernel == "precomputed", "binary_only": True}
-
     def fit(self, X, y, sample_weight=None):
         """Fit Kernel Unhinged classification model.
 
@@ -258,7 +261,7 @@ class KernelUnhinged(BaseEstimator, ClassifierMixin):
         self.n_classes_ = len(self.classes_)
 
         if self.n_classes_ > 2:
-            raise ValueError("KernelUnhinged only supports binary classification.")
+            raise ValueError("Only binary classification is supported.")
 
         y = label_binarizer.transform(y)
         y = column_or_1d(y)
@@ -308,3 +311,13 @@ class KernelUnhinged(BaseEstimator, ClassifierMixin):
         scores = self.decision_function(X)
         indices = (scores > 0).astype(int)
         return self.classes_[indices]
+
+    def __sklearn_tags__(self):
+        tags = super().__sklearn_tags__()
+        tags.input_tags.sparse = True
+        tags.classifier_tags.multi_class = False
+        tags.input_tags.pairwise = self.kernel == "precomputed"
+        return tags
+
+    def _more_tags(self):
+        return {"pairwise": self.kernel == "precomputed", "binary_only": True}

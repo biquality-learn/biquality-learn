@@ -1,8 +1,13 @@
 import numpy as np
 from sklearn.base import BaseEstimator, ClassifierMixin, MetaEstimatorMixin, clone
+from sklearn.ensemble import AdaBoostClassifier
 from sklearn.linear_model import LogisticRegression, SGDClassifier
 from sklearn.model_selection import StratifiedShuffleSplit
 from sklearn.semi_supervised import SelfTrainingClassifier
+from sklearn.utils import get_tags
+from sklearn.utils._test_common.instance_generator import (
+    PER_ESTIMATOR_XFAIL_CHECKS as SK_PER_ESTIMATOR_XFAIL_CHECKS,
+)
 from sklearn.utils.estimator_checks import parametrize_with_checks
 from sklearn.utils.multiclass import check_classification_targets
 from sklearn.utils.validation import _num_samples, check_is_fitted
@@ -24,7 +29,34 @@ from bqlearn.unhinged import KernelUnhinged, LinearUnhinged
         LinearUnhinged(),
         KernelUnhinged(),
         WeightedOneVsRestClassifier(SGDClassifier(random_state=0), n_jobs=-1),
-    ]
+    ],
+    expected_failed_checks=lambda estimator: {
+        LinearUnhinged: {
+            "check_sample_weight_equivalence_on_dense_data": (
+                "see issue https://github.com/scikit-learn/scikit-learn/issues/30770"
+            ),
+            "check_sample_weight_equivalence_on_sparse_data": (
+                "see issue https://github.com/scikit-learn/scikit-learn/issues/30770"
+            ),
+        },
+        KernelUnhinged: {
+            "check_sample_weight_equivalence_on_dense_data": (
+                "see issue https://github.com/scikit-learn/scikit-learn/issues/30770"
+            ),
+            "check_sample_weight_equivalence_on_sparse_data": (
+                "see issue https://github.com/scikit-learn/scikit-learn/issues/30770"
+            ),
+        },
+        WeightedOneVsRestClassifier: {
+            "check_sample_weight_equivalence_on_dense_data": (
+                "sample_weight is not equivalent to removing/repeating samples."
+            ),
+            "check_sample_weight_equivalence_on_sparse_data": (
+                "sample_weight is not equivalent to removing/repeating samples."
+            ),
+            "check_sample_weights_shape": "per class sample weights with ndim=2",
+        },
+    }.get(type(estimator), {}),
 )
 def test_all_estimators(estimator, check):
     return check(estimator)
@@ -47,7 +79,7 @@ def test_all_noisy_estimators(estimator, check):
     return check(estimator)
 
 
-class RandomSampleQuality(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):
+class RandomSampleQuality(MetaEstimatorMixin, ClassifierMixin, BaseEstimator):
     def __init__(self, estimator):
         self.estimator = estimator
 
@@ -84,6 +116,9 @@ class RandomSampleQuality(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):
         check_is_fitted(self)
         return self.estimator_.predict(X)
 
+    def __sklearn_tags__(self):
+        return get_tags(self.estimator)
+
 
 @parametrize_with_checks(
     [
@@ -97,7 +132,15 @@ class RandomSampleQuality(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):
             SelfTrainingClassifier(LogisticRegression(), max_iter=2),
             baseline="semi_supervised",
         ),
-    ]
+    ],
+    expected_failed_checks=lambda estimator: {
+        TrAdaBoostClassifier: SK_PER_ESTIMATOR_XFAIL_CHECKS.get(AdaBoostClassifier, {}),
+        BiqualityBaseline: {
+            "check_classifiers_classes": (
+                "fails on a weird test case for semi_supervised baseline"
+            )
+        },
+    }.get(type(estimator), {}),
 )
 def test_all_biquality_estimators(estimator, check):
     return check(RandomSampleQuality(estimator))
