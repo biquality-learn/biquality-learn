@@ -23,11 +23,11 @@ class EasyADAPT(TransformerMixin, BaseEstimator):
     :math:`\\Psi_U:\\mathcal{X}\\mapsto \\tilde{\\mathcal{X}}` and
     :math:`\\Psi_T:\\mathcal{X}\\mapsto \\tilde{\\mathcal{X}}`.
 
-    -  ..math::
+    .. math::
         \\forall \\mathbf{x} \\in \\mathcal{X},
         \\Psi_U(\\mathbf{x})=<\\mathbf{x}, \\mathbf{x}, \\mathbf{0}>
 
-    -  ..math::
+    .. math::
         \\forall \\mathbf{x} \\in \\mathcal{X},
         \\Psi_T(\\mathbf{x})=<\\mathbf{x}, \\mathbf{0}, \\mathbf{x}>
 
