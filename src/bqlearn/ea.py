@@ -14,7 +14,7 @@ from sklearn.utils.validation import (
 __all__ = ["EasyADAPT"]
 
 
-class EasyADAPT(BaseEstimator, TransformerMixin):
+class EasyADAPT(TransformerMixin, BaseEstimator):
     """A Frustratingly Easy approach to Domain Adaptation.
 
     EasyADAPT [1]_ creates an augmented input space
@@ -124,6 +124,11 @@ class EasyADAPT(BaseEstimator, TransformerMixin):
 
     def fit_transform(self, X, y=None, sample_quality=None):
         return self.fit(X, y).transform(X, sample_quality=sample_quality)
+
+    def __sklearn_tags__(self):
+        tags = super().__sklearn_tags__()
+        tags.no_validation = True
+        return tags
 
     def _more_tags(self):
         return {"no_validation": True}

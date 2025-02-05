@@ -25,7 +25,7 @@ def _final_estimator_has(attr):
     )
 
 
-class IRBL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):
+class IRBL(MetaEstimatorMixin, ClassifierMixin, BaseEstimator):
     """A Reweighted Classifier for Biquality Learning.
 
     An IRBL [1]_ classifier is a is a meta-algorithm that uses the covariate shift

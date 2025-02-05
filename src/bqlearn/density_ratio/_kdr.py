@@ -24,7 +24,7 @@ def _estimator_has(attr):
     )
 
 
-class KDR(BaseEstimator, ClassifierMixin, MetaEstimatorMixin, metaclass=ABCMeta):
+class KDR(MetaEstimatorMixin, ClassifierMixin, BaseEstimator, metaclass=ABCMeta):
     """Base class for K Density Ratio Biquality Classifiers.
 
     A K density ratio classifier is a meta-algorithm that uses the covariate shift

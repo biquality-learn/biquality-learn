@@ -27,7 +27,7 @@ def _estimator_has(attr):
     )
 
 
-class IDR(BaseEstimator, ClassifierMixin, MetaEstimatorMixin, metaclass=ABCMeta):
+class IDR(MetaEstimatorMixin, ClassifierMixin, BaseEstimator, metaclass=ABCMeta):
     """Base class for Iterative Density Ratio Biquality Classifiers.
 
     A iterative density ratio classifier is a meta-algorithm that uses

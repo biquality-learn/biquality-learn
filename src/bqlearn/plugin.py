@@ -31,7 +31,7 @@ def _estimator_has(attr):
     )
 
 
-class PluginCorrection(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):
+class PluginCorrection(MetaEstimatorMixin, ClassifierMixin, BaseEstimator):
     """A Noise Corrected Plug-in Classifier.
 
     PluginCorrection [1]_ learns a classifier on noisy data

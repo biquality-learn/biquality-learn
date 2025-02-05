@@ -35,7 +35,7 @@ def _estimator_has(attr):
     )
 
 
-class LossCorrection(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):
+class LossCorrection(MetaEstimatorMixin, ClassifierMixin, BaseEstimator):
     """A Classifier corrected with the method of unbiased estimators [1]_.
 
     It construts a surrogate loss :math:`\\tilde{L}` from the loss of interest :math:`L`

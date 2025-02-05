@@ -22,7 +22,7 @@ def _estimator_has(attr):
     )
 
 
-class BiqualityBaseline(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):
+class BiqualityBaseline(MetaEstimatorMixin, ClassifierMixin, BaseEstimator):
     """A Biquality Baseline.
 
     A BaselineBiqualityClassifier lift usual scikit-learn classifiers to train
@@ -182,15 +182,6 @@ class BiqualityBaseline(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):
         indices = np.isin(self.classes_, self.estimator_.classes_)
         proba[:, indices] = self.estimator_.predict_proba(X)
         return proba
-
-    def _more_tags(self):
-        return {
-            "_xfail_checks": {
-                "check_classifiers_classes": (
-                    "fails on a weird test case for semi_supervised baseline"
-                ),
-            },
-        }
 
 
 def make_baseline(estimator, baseline="no-correction"):

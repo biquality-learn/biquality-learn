@@ -33,7 +33,7 @@ def _final_estimator_has(attr):
     )
 
 
-class IRLNL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):
+class IRLNL(MetaEstimatorMixin, ClassifierMixin, BaseEstimator):
     """A Reweighted Classifier for Learning with Noisy Label [1]_.
 
     For each class :math:`y`, the untrusted samples are reweighted given the predictions
@@ -331,10 +331,3 @@ or array-like of shape (n_classes, n_classes), default='anchor'
         """
         check_is_fitted(self)
         return self._le.inverse_transform(self.final_estimator_.predict(X))
-
-    def _more_tags(self):
-        return {
-            "_xfail_checks": {
-                "check_parameters_default_constructible": "tofix",
-            }
-        }
