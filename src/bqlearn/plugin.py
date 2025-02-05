@@ -267,3 +267,8 @@ or array-like of shape (n_classes, n_classes), default='iterative'
             self.feature_names_in_ = self.estimator_.feature_names_in_
 
         return self
+
+    def __sklearn_tags__(self):
+        tags = super().__sklearn_tags__()
+        tags.input_tags.sparse = True
+        return tags

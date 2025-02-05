@@ -128,6 +128,7 @@ class EasyADAPT(TransformerMixin, BaseEstimator):
     def __sklearn_tags__(self):
         tags = super().__sklearn_tags__()
         tags.no_validation = True
+        tags.input_tags.sparse = True
         return tags
 
     def _more_tags(self):

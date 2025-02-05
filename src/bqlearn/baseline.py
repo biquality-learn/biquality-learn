@@ -183,6 +183,11 @@ class BiqualityBaseline(MetaEstimatorMixin, ClassifierMixin, BaseEstimator):
         proba[:, indices] = self.estimator_.predict_proba(X)
         return proba
 
+    def __sklearn_tags__(self):
+        tags = super().__sklearn_tags__()
+        tags.input_tags.sparse = True
+        return tags
+
 
 def make_baseline(estimator, baseline="no-correction"):
     "Make a biquality classifier from a scikit-learn classifier"

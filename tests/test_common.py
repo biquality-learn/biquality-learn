@@ -4,6 +4,7 @@ from sklearn.ensemble import AdaBoostClassifier
 from sklearn.linear_model import LogisticRegression, SGDClassifier
 from sklearn.model_selection import StratifiedShuffleSplit
 from sklearn.semi_supervised import SelfTrainingClassifier
+from sklearn.utils import get_tags
 from sklearn.utils._test_common.instance_generator import (
     PER_ESTIMATOR_XFAIL_CHECKS as SK_PER_ESTIMATOR_XFAIL_CHECKS,
 )
@@ -114,6 +115,9 @@ class RandomSampleQuality(MetaEstimatorMixin, ClassifierMixin, BaseEstimator):
     def predict(self, X):
         check_is_fitted(self)
         return self.estimator_.predict(X)
+
+    def __sklearn_tags__(self):
+        return get_tags(self.estimator)
 
 
 @parametrize_with_checks(

@@ -337,3 +337,8 @@ or array-like of shape (n_classes, n_classes), default='anchor'
         except (AttributeError, NotImplementedError):
             scores = self.estimator_.predict_proba(X)
         return self._le.inverse_transform(scores.argmax(axis=1))
+
+    def __sklearn_tags__(self):
+        tags = super().__sklearn_tags__()
+        tags.input_tags.sparse = True
+        return tags

@@ -331,3 +331,8 @@ or array-like of shape (n_classes, n_classes), default='anchor'
         """
         check_is_fitted(self)
         return self._le.inverse_transform(self.final_estimator_.predict(X))
+
+    def __sklearn_tags__(self):
+        tags = super().__sklearn_tags__()
+        tags.input_tags.sparse = True
+        return tags
