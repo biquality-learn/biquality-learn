@@ -18,13 +18,13 @@ Biquality Learning is a machine learning framework to train classifiers on Biqua
 
 ## Install
 
-The package is available on [PyPi](https://pypi.org). To install biquality-learn, run the following command :
+The package is available on [PyPi](https://pypi.org/project/biquality-learn/). To install biquality-learn, run the following command :
 
 ```bash
 pip install biquality-learn
 ```
 
-A dev version is available on [TestPyPi](https://test.pypi.org) :
+A dev version is available on [TestPyPi](https://test.pypi.org/project/biquality-learn/) :
 
 ```bash
 pip install --index-url https://test.pypi.org/simple/ biquality-learn
