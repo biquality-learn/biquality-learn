@@ -20,7 +20,7 @@ def make_imbalance(
     labels=None,
 ):
     """
-    Create class imbalance in a multi class scenario according to [1]_.
+    Create class imbalance in a multi class scenario according to [1]_ and [2]_.
 
     It selects a fraction of all class to be considered as the minority group
     according to `minority_class_fraction` and going to subsample it given
@@ -28,7 +28,8 @@ def make_imbalance(
 
     If `imbalance_distribution='linear'`, it creates imbalance between all classes by
     decreasing linearly the ratio of subsampling when iterating through classes
-    according to `majority_ratio`.
+    according to `majority_ratio`. If `imbalance_distribution='long_tailed'`, the ratio
+    of subsampling decreases exponentially.
 
     Parameters
     ----------
@@ -43,7 +44,7 @@ def make_imbalance(
         Ratio between number of samples in majority classes and
         number of samples in minority classes.
 
-    imbalance_distribution : {'step', 'linear'}, default='step'
+    imbalance_distribution : {'step', 'linear', 'long_tailed'}, default='step'
         Imbalance distribution.
 
     minority_class_fraction : float, default = 0.5
@@ -71,6 +72,8 @@ def make_imbalance(
     ----------
     .. [1] Mateusz Buda, et al. "A systematic study of the class imbalance problem\
         in convolutional neural networks." Neural Networks, 106:249-259, 2018.
+    .. [2] Cui, Y., Jia, M., Lin, T.-Y., Song, Y., & Belongie, S. "Class-Balanced Loss\
+        Based on Effective Number of Samples." CVPR, 2019.
     """
 
     rng = check_random_state(random_state)
@@ -127,6 +130,10 @@ def make_imbalance(
         sampling_probability = np.ones(n_classes)
         n_minority_classes = round(n_classes * minority_class_fraction)
         sampling_probability[argsort_classes[:n_minority_classes]] /= majority_ratio
+
+    elif imbalance_distribution == "long_tailed":
+        sampling_probability = np.logspace(0, -np.log10(majority_ratio), n_classes)
+        sampling_probability = sampling_probability[argsort_classes]
 
     else:
         raise ValueError(

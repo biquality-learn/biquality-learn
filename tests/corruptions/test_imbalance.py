@@ -62,6 +62,24 @@ def test_make_linear_imbalance(n_classes, majority_ratio):
 
 @pytest.mark.parametrize("n_classes", [10, 100])
 @pytest.mark.parametrize("majority_ratio", [2, 10])
+def test_make_long_tailed_imbalance(n_classes, majority_ratio):
+    n_samples = 1000
+    y = np.repeat(np.arange(0, n_classes), n_samples / n_classes)
+
+    y_imbalanced = make_imbalance(
+        y,
+        majority_ratio=majority_ratio,
+        imbalance_distribution="long_tailed",
+        random_state=0,
+    )
+
+    diff = np.diff(np.log(np.sort(np.bincount(y_imbalanced))))
+
+    assert abs(np.max(diff) - np.min(diff)) <= 1
+
+
+@pytest.mark.parametrize("n_classes", [10, 100])
+@pytest.mark.parametrize("majority_ratio", [2, 10])
 @pytest.mark.parametrize("minority_class_fraction", [0.2, 0.6])
 def test_make_step_imbalance(n_classes, majority_ratio, minority_class_fraction):
     n_samples = 1000
